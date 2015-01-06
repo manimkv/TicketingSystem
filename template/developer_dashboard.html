@@ -20,9 +20,14 @@
               
               <div class="inside_search_tab">
                 <div class="right_box"><input type="text" placeholder="search"></input></div>
-                <div class="right_box"><select ng-change="fetch_sorted(myColor)" ng-model="myColor" ng-options="color for color in colors">
+                
+                <div class="right_box"><select ng-change="fetch_sorted(myField)" ng-model="myField" ng-options="field for field in fields">
                   <option value="">-- sort --</option>
                 </select></div>
+                <div class="right_box"><select ng-change="fetch_filtered(myFilter)" ng-model="myFilter" ng-options="filter for filter in filters">
+                  <option value="">-- filter by priority and status --</option>
+                </select></div>
+
                 <div class="right_box">add new</div>
               </div>
               <div>

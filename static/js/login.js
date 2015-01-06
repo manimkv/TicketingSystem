@@ -43,12 +43,22 @@ app.controller('loginController',function ($scope,$http,$cookies) {
                     .success(function(data) {
                         $scope.list_details = data;
                     });
-    $scope.fetch_sorted = function(sort){
-        $http.get("/fetch_tickets/?fetch_for=all&&sort_parm="+sort_parm, {})
+    $scope.fetch_sorted = function(sort_parm){
+        $http.get("/fetch_tickets/?sort_parm="+sort_parm, {})
                     .success(function(data) {
                         $scope.list_details = data;
                     });
     }
+
+    $scope.fetch_filtered = function(filter_parm){
+        $http.get("/filter_tickets/?filter_parm="+filter_parm, {})
+                    .success(function(data) {
+                        $scope.list_details = data;
+                    });
+    }
+
     // $scope.list_head = ['lsd','sdfsd','wefwe','sdfds']
-    $scope.colors = ['subject','submitted_date','modified_date','first_response','contact','assigned_to','description','status','priority']
+    $scope.fields = ['subject','submitted_date','modified_date','first_response','contact','assigned_to','description','status','priority']
+    $scope.filters = ['Open', 'Working', 'Closed','Now', 'Soon', 'Someday']
+
 });

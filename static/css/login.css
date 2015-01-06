@@ -34,13 +34,15 @@ color: white;
 	height: 50px;
 background-color: white;
 }
-.indi_tab{
+.indi_tab {
 display: inline-block;
 width: 100px;
-background-color: blue;
+background-color: rgb(51, 223, 92);
 line-height: 50px;
 cursor: pointer;
+text-align: center;
 }
+
 .inside_box{
 	display: block;
 	width: 80%;

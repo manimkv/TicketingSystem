@@ -61,6 +61,12 @@ def search_tickets(request):
     tickets = get_sorted_tickets(normalize_tickets(tickets))
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
+def filter_tickets(request):
+    query = request.GET['filter_parm']
+    # tickets = Ticket.objects.filter
+    # tickets = get_sorted_tickets(normalize_tickets(tickets))
+    return HttpResponse(content = json.dumps('tickets'), content_type = "application/json; charset=UTF-8")
+
 def ticket_action(request):
     data = json.loads(request.body)
     action, _id = data['action'], data['id']
