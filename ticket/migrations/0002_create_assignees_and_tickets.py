@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
 from ticket.models import Developer, Ticket
-from random import randint, randrange
+from random import randrange
 from datetime import datetime, timedelta
 
 class Migration(DataMigration):
@@ -24,7 +24,12 @@ class Migration(DataMigration):
                      {'username': 'developer2', 'password': 'developer2', 'email': 'developer2@gmail.com', 'first_name': 'dev2', 'mobile': 9999999992},
                      {'username': 'developer3', 'password': 'developer3', 'email': 'developer3@gmail.com', 'first_name': 'dev3', 'mobile': 9999999993},
                      {'username': 'developer4', 'password': 'developer4', 'email': 'developer4@gmail.com', 'first_name': 'dev4', 'mobile': 9999999994},
-                     {'username': 'developer5', 'password': 'developer5', 'email': 'developer5@gmail.com', 'first_name': 'dev5', 'mobile': 9999999995}]
+                     {'username': 'developer5', 'password': 'developer5', 'email': 'developer5@gmail.com', 'first_name': 'dev5', 'mobile': 9999999995},
+                     {'username': 'developer6', 'password': 'developer6', 'email': 'developer6@gmail.com', 'first_name': 'dev6', 'mobile': 9999999996},
+                     {'username': 'developer7', 'password': 'developer7', 'email': 'developer7@gmail.com', 'first_name': 'dev7', 'mobile': 9999999997},
+                     {'username': 'developer8', 'password': 'developer8', 'email': 'developer8@gmail.com', 'first_name': 'dev8', 'mobile': 9999999998},
+                     {'username': 'developer9', 'password': 'developer9', 'email': 'developer9@gmail.com', 'first_name': 'dev9', 'mobile': 9999999999},
+                     {'username': 'developer0', 'password': 'developer0', 'email': 'developer0@gmail.com', 'first_name': 'dev0', 'mobile': 9999999990}]
         
         for assignee in assignees:
             user = User.objects.create(username = assignee['username'],
@@ -39,6 +44,8 @@ class Migration(DataMigration):
         ### ticket creation
         _from, _to = datetime.strptime('20150101', '%Y%m%d'), datetime.strptime('20151212', '%Y%m%d')
         users = User.objects.filter(~Q(username = 'Admin'))
+        STATUS, PRIORITY = ['Open', 'Working', 'Closed'], ['Now', 'Soon', 'Someday']
+        
         for i in range(5000):
             subject = 'issue00%s' % i
             submitted_date = self.random_date(_from, _to)
@@ -48,8 +55,9 @@ class Migration(DataMigration):
             rest = [u for u in users if u != contact]
             assigned_to = rest[randrange(len(rest))]
             description = 'description00%s' % i
-            status = randint(1, 3)
-            priority = randint(1, 3)
+            status = STATUS[randrange(3)]
+            priority = PRIORITY[randrange(3)]
+
             Ticket.objects.create(subject = subject,
                                   submitted_date = submitted_date,
                                   first_response = first_response,
@@ -82,7 +90,7 @@ class Migration(DataMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -90,7 +98,7 @@ class Migration(DataMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'contenttypes.contenttype': {
@@ -115,8 +123,8 @@ class Migration(DataMigration):
             'first_response': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified_date': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'priority': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'status': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
+            'priority': ('django.db.models.fields.CharField', [], {'default': "'Now'", 'max_length': '10'}),
+            'status': ('django.db.models.fields.CharField', [], {'default': "'Open'", 'max_length': '10'}),
             'subject': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'submitted_date': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'})
         }

@@ -56,7 +56,9 @@ def fetch_tickets(request):
 
 def search_tickets(request):
     query = json.loads(request.body)['query']
-    tickets = Ticket.objects.filter(Q(subject__icontains = query) | Q(description__icontains=query) | Q(status__icontains=query) | Q(priority__icontains=query)).values()
+    tickets = Ticket.objects.filter(Q(subject__icontains = query) | Q(description__icontains = query) | Q(status__icontains = query) | Q(priority__icontains = query)).values()
+    tickets = get_sorted_tickets(normalize_tickets(tickets))
+    return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
 
 

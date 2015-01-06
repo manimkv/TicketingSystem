@@ -8,7 +8,7 @@ def update_last_login(sender, user, **kwargs):
     user.save(update_fields = ['last_login'])
     user_logged_in.connect(update_last_login)
 
-class Developer(models.Model):
+class Developer(models.Model):  
     user = models.OneToOneField(User)
     mobile = models.CharField(max_length = 20)
     last_login = models.DateTimeField(default = timezone.now)
@@ -17,15 +17,15 @@ class Developer(models.Model):
         return unicode(self.user)
 
 STATUS_CODES = (
-    (1, 'Open'),
-    (2, 'Working'),
-    (3, 'Closed'),
+    ('Open', 'Open'),
+    ('Working', 'Working'),
+    ('Closed', 'Closed'),
     )
 
 PRIORITY_CODES = (
-    (1, 'Now'),
-    (2, 'Soon'),
-    (3, 'Someday'),
+    ('Now', 'Now'),
+    ('Soon', 'Soon'),
+    ('Someday', 'Someday'),
     )
 
 class Ticket(models.Model):
@@ -36,8 +36,8 @@ class Ticket(models.Model):
     contact = models.ForeignKey(User, related_name = "who raised")
     assigned_to = models.ForeignKey(User)
     description = models.TextField(blank = True, null = True)
-    status = models.IntegerField(default = 1, choices = STATUS_CODES)
-    priority = models.IntegerField(default = 1, choices = PRIORITY_CODES)
+    status = models.CharField(default = 'Open', max_length = 10, choices = STATUS_CODES)
+    priority = models.CharField(default = 'Now', max_length = 10, choices = PRIORITY_CODES)
 
     def __str__(self):
         return self.subject
