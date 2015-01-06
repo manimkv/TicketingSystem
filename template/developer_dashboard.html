@@ -9,6 +9,7 @@
        <script src="{{STATIC_URL}}js/angular_resource.js"></script>
         <script src="{{STATIC_URL}}js/cookies.js"></script>
     <body >
+      {%verbatim%}
         <div  class="maindiv" ng-controller="loginController">
             <div class="heading">Ticketing System</div>
             <div class="tabs_div">
@@ -28,21 +29,22 @@
                 <table>
                                      <tr>
                                          <th class="common_style" ng-repeat="(key,value) in {1:'subject',2:'submitted_date',3:'modified_date',4:'first_response',5:'contact',6:'assigned_to',7:'description',8:'status',9:'priority'}">
-                                          <span style="width: 70px;display: block;text-align: center;">{{value}}</span>
+                                          <span style="width: 100px;display: block;text-align: center;">{{value}}</span>
                                         </th>
                                          
                                       
                                      </tr>
-                                     <!-- <tr ng-repeat="(item1,key) in list_details">
-                                        <td class="common_style">{{key.date}}</td>
+                                     <tr ng-repeat="(item1,key) in list_details">
+                                        <td class="common_style">{{key}}</td>
                                          
                                        
 
-                                      </tr> -->
+                                      </tr>
                              </table>
               </div>
             </div>
         </div>
+        {%endverbatim%}
     </body>
  <script src="{{STATIC_URL}}js/login.js"></script>
 </html>

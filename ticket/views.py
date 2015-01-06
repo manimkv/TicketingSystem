@@ -76,7 +76,7 @@ def ticket_action(request):
                                   priority = ticket.get('priority', 'Now'))
         except (KeyError, IntegrityError) as e:
             response = e.__class__.__name__
-    elif action == 'update'
+    elif action == 'update':
         ticket = Ticket.objects.get(id = _id)
         response = 'Ticket Updated Succesfully'
     else:

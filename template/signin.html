@@ -9,6 +9,8 @@
        <script src="{{STATIC_URL}}js/angular_resource.js"></script>
         <script src="{{STATIC_URL}}js/cookies.js"></script>
     <body >
+        {% csrf_token %}
+        {%verbatim%}
         <div  class="maindiv" ng-controller="loginController">
             <div class="heading">Ticketing System</div>
             <div class="login_body">
@@ -19,6 +21,8 @@
                 </div>
             </div>
         </div>
+        {%endverbatim%}
     </body>
+
  <script src="{{STATIC_URL}}js/login.js"></script>
 </html>
