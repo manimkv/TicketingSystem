@@ -46,8 +46,8 @@ def dashboard(request):
 
 @login_required
 def fetch_tickets(request):
-    fetch = request.GET
-    fetch_for, sort_parm = fetch['fetch_for'], fetch['sort_parm']
+    sort_parm = request.GET['sort_parm']
+    fetch_for = 'all' if str(request.user) == 'Admin' else None
     if fetch_for == 'all':
         tickets = Ticket.objects.all().values()
     else:
