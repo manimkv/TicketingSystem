@@ -10,6 +10,8 @@ import json
 import re
 from lib.ticket_processing_helpers import *
 from datetime import datetime
+from calendar import monthrange
+
 
 def signin(request):
     return render(request, 'signin.html')
@@ -92,3 +94,32 @@ def ticket_action(request):
         response = 'Ticket Deleted Succesfully'
     return HttpResponse(content = json.dumps(response), content_type = "application/json; charset=UTF-8")
 
+@login_required
+def add_developer(request):
+    data = json.loads(request.body)
+    try:
+        response = 'Developer Created Succesfully'
+        user = User.objects.create(username = data['username'],
+                                   email = data['email'],
+                                   first_name = data['first_name'],
+                                   last_name = data.get('last_name', '')
+                                   )   
+        user.set_password(data['password'])
+        user.save()        
+        Developer.objects.create(user=User.objects.get(username = data['username']),
+                                 mobile = data['mobile'])
+    except IntegrityError:
+        response = 'Developer Already Exists'    
+    return HttpResponse(content=json.dumps(response), content_type='application/json')    
+
+def avg_closed(request):
+    data = json.loads(request.body)
+    month, year = data.month('month', ''), data['year']
+    if month:
+        start_date = datetime.strptime('%s%s01' % (year, '0%s' % month if month<10 else month) , '%Y%m%d')
+        end_date = datetime.strptime('%s%s%s' % (year,  '0%s' % month if month<10 else month, monthrange(year, month)[1]) , '%Y%m%d')
+    else:
+        start_date = datetime.strptime('%s0101' % year , '%Y%m%d')
+        start_date = datetime.strptime('%s1231' % year, '%Y%m%d')
+    available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
+    

@@ -30,8 +30,8 @@ PRIORITY_CODES = (
 
 class Ticket(models.Model):
     subject = models.CharField(max_length = 100, unique = True)
-    submitted_date = models.DateField(auto_now_add = True)
-    modified_date = models.DateField(auto_now = True)
+    submitted_date = models.DateField(default = timezone.now)
+    modified_date = models.DateField(default = timezone.now)
     first_response = models.DateField(blank = True, null = True)
     contact = models.ForeignKey(User, related_name = "who raised")
     assigned_to = models.ForeignKey(User)
