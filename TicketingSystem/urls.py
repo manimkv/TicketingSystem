@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url(r'^dashboard/$', 'ticket.views.dashboard'), 
     url(r'^fetch_tickets/$', 'ticket.views.fetch_tickets'), 
     url(r'^search_tickets/$', 'ticket.views.search_tickets'), 
+    url(r'^ticket_action/$', 'ticket.views.ticket_action'), 
 
 )

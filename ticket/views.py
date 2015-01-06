@@ -4,11 +4,12 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.db import IntegrityError
 from ticket.models import Ticket, Developer
 import json    
 import re
 from lib.ticket_processing_helpers import *
-
+from datetime import datetime
 
 def signin(request):
     return render(request, 'signin.html')
@@ -60,5 +61,26 @@ def search_tickets(request):
     tickets = get_sorted_tickets(normalize_tickets(tickets))
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
-
+def ticket_action(request):
+    data = json.loads(request.body)
+    action, _id = data['action'], data['id']
+    if action == 'new':
+        ticket = data['ticket']
+        response = 'Ticket Created Succesfully'
+        try:
+            Ticket.objects.create(subject = ticket['subject'],
+                                  contact = User.objects.get(username = ticket['contact']),
+                                  assigned_to = User.objects.get(username = ticket['assigned_to']),
+                                  description = ticket.get('description', ''),
+                                  status = ticket.get('status', 'Open'),
+                                  priority = ticket.get('priority', 'Now'))
+        except (KeyError, IntegrityError) as e:
+            response = str(e)
+    elif action == 'update'
+        ticket = Ticket.objects.get(id = _id)
+        response = 'Ticket Updated Succesfully'
+    if action == 'delete':
+        Ticket.objects.get(id = _id).delete()
+        response = 'Ticket Deleted Succesfully'
+    return HttpResponse(content = json.dumps(response), content_type = "application/json; charset=UTF-8")
 

@@ -29,7 +29,7 @@ PRIORITY_CODES = (
     )
 
 class Ticket(models.Model):
-    subject = models.CharField(max_length = 100)
+    subject = models.CharField(max_length = 100, unique = True)
     submitted_date = models.DateField(auto_now_add = True)
     modified_date = models.DateField(auto_now = True)
     first_response = models.DateField(blank = True, null = True)
