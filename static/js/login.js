@@ -1,10 +1,11 @@
-var app = angular.module('loginapp', ['ngCookies','ngResource']);
 
+var app = angular.module('loginapp', ['ngCookies','ngResource']);
 
 app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
+
 app.run(function($rootScope, $http, $cookies){
     // set the CSRF token here
     $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
@@ -38,6 +39,16 @@ app.controller('loginController',function ($scope,$http,$cookies) {
     	window.location='/dashboard/'
     });
 	}
+    $http.get("/fetch_tickets/?fetch_for=all&&sort_parm=status", {})
+                    .success(function(data) {
+                        $scope.list_details = data;
+                    });
+    $scope.fetch_sorted = function(sort){
+        $http.get("/fetch_tickets/?fetch_for=all&&sort_parm="+sort_parm, {})
+                    .success(function(data) {
+                        $scope.list_details = data;
+                    });
+    }
     // $scope.list_head = ['lsd','sdfsd','wefwe','sdfds']
     $scope.colors = ['subject','submitted_date','modified_date','first_response','contact','assigned_to','description','status','priority']
 });
