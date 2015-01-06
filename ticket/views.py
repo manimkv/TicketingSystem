@@ -33,7 +33,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponse(content = json.dumps("Logout Succesfully"), content_type = "application/json; charset=UTF-8")
+    return render(request, 'signin.html')
 
 @login_required
 def dashboard(request):
@@ -47,8 +47,7 @@ def dashboard(request):
 @login_required
 def fetch_tickets(request):
     sort_parm = request.GET['sort_parm']
-    fetch_for = 'all' if str(request.user) == 'Admin' else None
-    if fetch_for == 'all':
+    if str(request.user) == 'Admin':
         tickets = Ticket.objects.all().values()
     else:
         tickets = Ticket.objects.filter(assigned_to = request.user).values()
@@ -63,9 +62,12 @@ def search_tickets(request):
 
 def filter_tickets(request):
     query = request.GET['filter_parm']
-    # tickets = Ticket.objects.filter
-    # tickets = get_sorted_tickets(normalize_tickets(tickets))
-    return HttpResponse(content = json.dumps('tickets'), content_type = "application/json; charset=UTF-8")
+    if str(request.user) == 'Admin':
+        filtered_tickets = Ticket.objects.filter(Q(status = query) | Q(priority = query)).values()
+    else:
+        filtered_tickets = Ticket.objects.filter(Q(status = query) | Q(priority = query), assigned_to = request.user).values()    
+    tickets = get_sorted_tickets(normalize_tickets(filtered_tickets), parm = 'priority')       
+    return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
 def ticket_action(request):
     data = json.loads(request.body)

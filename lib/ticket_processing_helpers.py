@@ -14,6 +14,9 @@ def normalize_tickets(tickets):
     return tickets    
 
 def get_sorted_tickets(tickets, parm = 'status'):
-    # status = {'Open': 3, 'Working': 2, 'Closed': 1}
-    # priority = {'Now': 3, 'Soon': 2, 'Someday': 1}
-    return sorted(tickets, key = lambda y: y[parm])
+    status, priority = {'Open': 1, 'Working': 2, 'Closed': 3}, {'Now': 1, 'Soon': 2, 'Someday': 3}
+    key = lambda y: y[parm]
+    if parm in ['status', 'priority']:
+        parm_dict = eval(parm)
+        key = lambda y: parm_dict[y[parm]]
+    return sorted(tickets, key = key)
