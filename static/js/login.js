@@ -10,6 +10,21 @@ app.run(function($rootScope, $http, $cookies){
     $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
 
   });
+
+app.directive('ngEnter', function() {
+        return function(scope, element, attrs) {
+            element.bind("keydown keypress", function(event) {
+                if(event.which === 13) {
+                        scope.$apply(function(){
+                                scope.$eval(attrs.ngEnter);
+                        });
+                        
+                        event.preventDefault();
+                }
+            });
+        };
+});
+
 app.controller('loginController',function ($scope,$http,$cookies) {
 	$scope.continue_login = function(username,password){
         $http.defaults.headers.post['csrf_tocken'] = $cookies.csrftoken;

@@ -15,8 +15,8 @@
             <div class="heading">Ticketing System</div>
             <div class="login_body">
                 <div class="login_textbox">
-                    <input ng-model="username" type="text" placeholder="username" style="width: 300px;height: 50px;position: relative;top: 10px;left: 40px;"></input>
-                    <input ng-model="password" type="text" placeholder="password" style="width: 300px;height: 50px;position: relative;top: 10px;left: 40px;margin-top:20px;"></input>
+                    <input ng-model="username" type="text" placeholder="email or username" style="width: 300px;height: 50px;position: relative;top: 10px;left: 40px;"></input>
+                    <input ng-model="password" type="password" placeholder="password" style="width: 300px;height: 50px;position: relative;top: 10px;left: 40px;margin-top:20px;" ng-enter="continue_login(username,password)"></input>
                     <button class="button" ng-click="continue_login(username,password)">login</button>
                 </div>
             </div>
