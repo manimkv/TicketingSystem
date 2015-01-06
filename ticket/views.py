@@ -9,8 +9,9 @@ from ticket.models import Ticket, Developer
 import json    
 import re
 from lib.ticket_processing_helpers import *
+from lib.utils import *
 from datetime import datetime
-from calendar import monthrange
+from dateutil.relativedelta import relativedelta
 
 
 def signin(request):
@@ -73,9 +74,8 @@ def filter_tickets(request):
 
 def ticket_action(request):
     data = json.loads(request.body)
-    action, _id = data['action'], data['id']
+    action, _id, ticket = data['action'], data['id'], data.get('ticket', {})
     if action == 'new':
-        ticket = data['ticket']
         response = 'Ticket Created Succesfully'
         try:
             Ticket.objects.create(subject = ticket['subject'],
@@ -87,7 +87,11 @@ def ticket_action(request):
         except (KeyError, IntegrityError) as e:
             response = e.__class__.__name__
     elif action == 'update':
-        ticket = Ticket.objects.get(id = _id)
+        t = Ticket.objects.get(id = _id)
+        t.status = ticket['status']
+        if not tictket.first_response:
+            t.first_response = ticket['first_response']
+        t.save()
         response = 'Ticket Updated Succesfully'
     else:
         Ticket.objects.get(id = _id).delete()
@@ -112,14 +116,43 @@ def add_developer(request):
         response = 'Developer Already Exists'    
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
-def avg_closed(request):
+def avg_closed_tickets(request):
     data = json.loads(request.body)
-    month, year = data.month('month', ''), data['year']
-    if month:
-        start_date = datetime.strptime('%s%s01' % (year, '0%s' % month if month<10 else month) , '%Y%m%d')
-        end_date = datetime.strptime('%s%s%s' % (year,  '0%s' % month if month<10 else month, monthrange(year, month)[1]) , '%Y%m%d')
+    month, year, for_all = data.get('month', ''), data['year'], data['for_all']
+    start_date, end_date = get_relative_dates(month, year)
+    if for_all:
+        available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
+        closed_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date), status = 'Closed')
     else:
-        start_date = datetime.strptime('%s0101' % year , '%Y%m%d')
-        start_date = datetime.strptime('%s1231' % year, '%Y%m%d')
-    available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
-    
+        available_tickets = Ticket.objects.filter(assigned_to = request.user, submitted_date__range = (start_date, end_date))
+        closed_tickets = Ticket.objects.filter(assigned_to = request.user, submitted_date__range = (start_date, end_date), status = 'Closed')        
+    try:
+        len_closed_tickets, len_available_tickets = len(closed_tickets), len(available_tickets)
+        avg_closed = (float(len_closed_tickets) / float(len_available_tickets)) * 100
+    except ZeroDivisionError:
+        avg_closed = 0.0
+    response = {'available_tickets': len_available_tickets, 'closed_tickets': len_closed_tickets, 'avg_closed': avg_closed}
+    return HttpResponse(content=json.dumps(response), content_type='application/json')    
+
+def avg_response_tickets(request):
+    data = json.loads(request.body)
+    month, year, for_all = data.get('month', ''), data['year'], data['for_all']
+    start_date, end_date = get_relative_dates(month, year)
+    if for_all:
+        available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
+    else:
+        available_tickets = Ticket.objects.filter(assigned_to = request.user, submitted_date__range = (start_date, end_date))
+    without_response = with_response = sum_dif = 0 
+    for t in available_tickets:
+        if t.first_response:
+            sum_dif += relativedelta(t.first_response, t.submitted_date).seconds
+            with_response += 1
+        else:
+            without_response += 1
+    try:
+        avg_response = float(sum_dif) / float(with_response) * 60.0
+    except ZeroDivisionError:
+        avg_response = 0
+    response = {'without_response': without_response, 'with_response': with_response, 'avg_response': avg_response}
+    return HttpResponse(content=json.dumps(response), content_type='application/json')    
+

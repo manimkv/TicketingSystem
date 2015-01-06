@@ -14,4 +14,7 @@ urlpatterns = patterns('',
     url(r'^search_tickets/$', 'ticket.views.search_tickets'), 
     url(r'^ticket_action/$', 'ticket.views.ticket_action'), 
     url(r'^filter_tickets/$', 'ticket.views.filter_tickets'), 
+    url(r'^add_developer/$', 'ticket.views.add_developer'), 
+    url(r'^avg_closed_tickets/$', 'ticket.views.avg_closed_tickets'), 
+    url(r'^avg_response_tickets/$', 'ticket.views.avg_response_tickets'), 
 )
