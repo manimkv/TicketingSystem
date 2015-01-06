@@ -1,0 +1,33 @@
+.maindiv{
+background-color: grey;
+height: 500px;
+
+}
+.heading{
+	height: 50px;
+	width: 100%;
+	background-color:black;
+	font-size:40px;
+	color: white;
+	text-align: center;
+
+}
+.login_textbox{
+	width: 400px;
+	height: 200px;
+	margin: 0 auto;
+	background-color: white;
+	margin-top: 20px;
+	border-radius: 5px;
+}
+.button{
+	position: relative;
+top: 30px;
+width: 100px;
+height: 40px;
+margin-left: 150px;
+background-color: rgb(79, 150, 79);
+font-size: 20px;
+color: white;
+
+}

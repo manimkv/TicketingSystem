@@ -1,0 +1,24 @@
+<html ng-app="loginapp">
+    <head>
+        <title> Ticketing System </title>
+    </head>
+    <link rel="stylesheet" href="{{STATIC_URL}}css/login.css">
+    <script src="{{STATIC_URL}}js/jquery-1.9.1.min.js">
+      </script>
+       <script src="{{STATIC_URL}}js/angular.js"></script>
+       <script src="{{STATIC_URL}}js/angular_resource.js"></script>
+        <script src="{{STATIC_URL}}js/cookies.js"></script>
+    <body >
+        <div  class="maindiv" ng-controller="loginController">
+            <div class="heading">Ticketing System</div>
+            <div class="login_body">
+                <div class="login_textbox">
+                    <input ng-model="username" type="text" placeholder="username" style="width: 300px;height: 50px;position: relative;top: 10px;left: 40px;"></input>
+                    <input ng-model="password" type="text" placeholder="password" style="width: 300px;height: 50px;position: relative;top: 10px;left: 40px;margin-top:20px;"></input>
+                    <button class="button" ng-click="continue_login(username,password)">login</button>
+                </div>
+            </div>
+        </div>
+    </body>
+ <script src="{{STATIC_URL}}js/login.js"></script>
+</html>
