@@ -79,7 +79,7 @@ def ticket_action(request):
     elif action == 'update'
         ticket = Ticket.objects.get(id = _id)
         response = 'Ticket Updated Succesfully'
-    if action == 'delete':
+    else:
         Ticket.objects.get(id = _id).delete()
         response = 'Ticket Deleted Succesfully'
     return HttpResponse(content = json.dumps(response), content_type = "application/json; charset=UTF-8")
