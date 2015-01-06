@@ -35,7 +35,7 @@ def logout_view(request):
     logout(request)
     return HttpResponse(content = json.dumps("Logout Succesfully"), content_type = "application/json; charset=UTF-8")
 
-# @login_required
+@login_required
 def dashboard(request):
     logged_user = str(request.user)
     if logged_user == 'admin':
@@ -46,9 +46,9 @@ def dashboard(request):
 
 @login_required
 def fetch_tickets(request):
-    fetch = json.loads(request.body)
+    fetch = request.GET
     fetch_for, sort_parm = fetch['fetch_for'], fetch['sort_parm']
-    if fetch == 'all':
+    if fetch_for == 'all':
         tickets = Ticket.objects.all().values()
     else:
         tickets = Ticket.objects.filter(assigned_to = request.user).values()
@@ -56,7 +56,7 @@ def fetch_tickets(request):
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
 def search_tickets(request):
-    query = json.loads(request.body)['query']
+    query = request.GET['query']
     tickets = Ticket.objects.filter(Q(subject__icontains = query) | Q(description__icontains = query) | Q(status__icontains = query) | Q(priority__icontains = query)).values()
     tickets = get_sorted_tickets(normalize_tickets(tickets))
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
