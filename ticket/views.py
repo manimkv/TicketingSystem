@@ -7,10 +7,8 @@ from django.db.models import Q
 from ticket.models import Ticket, Developer
 import json    
 import re
-from lib.ticket_processing_helper import *
+from lib.ticket_processing_helpers import *
 
-status = {'Open': 3, 'Working': 2, 'Closed': 1}
-priority = {'Now': 3, 'Soon': 2, 'Someday': 1}
 
 def signin(request):
     return render(request, 'signin.html')
@@ -47,13 +45,18 @@ def dashboard(request):
 
 @login_required
 def fetch_tickets(request):
-    fetch = json.loads(request.body)['fetch']
+    fetch = json.loads(request.body)
+    fetch_for, sort_parm = fetch['fetch_for'], fetch['sort_parm']
     if fetch == 'all':
         tickets = Ticket.objects.all().values()
     else:
         tickets = Ticket.objects.filter(assigned_to = request.user).values()
-    tickets = make_json_dict(normalize_tickets(tickets))
+    tickets = get_sorted_tickets(normalize_tickets(tickets), parm = sort_parm)
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
-def sort_tickets(request):
-    pass    
+def search_tickets(request):
+    query = json.loads(request.body)['query']
+    tickets = Ticket.objects.filter(Q(subject__icontains = query) | Q(description__icontains=query) | Q(status__icontains=query) | Q(priority__icontains=query)).values()
+
+
+
