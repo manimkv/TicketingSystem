@@ -18,4 +18,6 @@ app.controller('loginController',function ($scope,$http) {
     	window.location='/dashboard/'
     });
 	}
+    // $scope.list_head = ['lsd','sdfsd','wefwe','sdfds']
+    $scope.colors = ['subject','submitted_date','modified_date','first_response','contact','assigned_to','description','status','priority']
 });

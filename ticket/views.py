@@ -35,7 +35,7 @@ def logout_view(request):
     logout(request)
     return HttpResponse(content = json.dumps("Logout Succesfully"), content_type = "application/json; charset=UTF-8")
 
-@login_required
+# @login_required
 def dashboard(request):
     logged_user = str(request.user)
     if logged_user == 'admin':

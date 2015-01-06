@@ -1,6 +1,6 @@
 .maindiv{
 background-color: grey;
-height: 500px;
+height: 700px;
 
 }
 .heading{
@@ -30,4 +30,37 @@ background-color: rgb(79, 150, 79);
 font-size: 20px;
 color: white;
 
+}
+.tabs_div{
+	height: 50px;
+background-color: white;
+}
+.indi_tab{
+display: inline-block;
+width: 100px;
+background-color: blue;
+line-height: 50px;
+cursor: pointer;
+}
+.inside_box{
+	display: block;
+	width: 800px;
+	margin: 0 auto;
+	height: 500px;
+	margin-top: 20px;
+	background-color: white;
+}
+.inside_search_tab{
+	width: 100%;
+float: right;
+height: 50px;
+background-color: rgb(208, 207, 207);
+}
+.right_box{
+	width: 200px;
+	display: inline-block;
+	float: left;
+}
+.common_style{
+	border: 1px solid black;
 }
