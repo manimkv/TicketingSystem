@@ -26,7 +26,7 @@ font-size: 25px;display: inline-block;">{{username}}</div>
             <div class="inside_box" ng-show="tab=='ticket'">
               
               <div class="inside_search_tab">
-                <div class="right_box"><input ng-change="search_tickets(search)" ng-model="search" type="text" placeholder="search"></input></div>
+                <div class="right_box"><input ng-model="search" type="text" placeholder="search"></input><button  ng-click="search_tickets(search)">Go</button></div>
                 
                 <div class="right_box"><select ng-change="fetch_sorted(myField)" ng-model="myField" ng-options="field for field in fields">
                   <option value="">-- sort --</option>

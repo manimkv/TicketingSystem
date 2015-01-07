@@ -58,12 +58,14 @@ def fetch_tickets(request):
     tickets = get_sorted_tickets(normalize_tickets(tickets), parm = sort_parm)
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
+@login_required
 def search_tickets(request):
     query = request.GET['query']
     tickets = Ticket.objects.filter(Q(subject__icontains = query) | Q(description__icontains = query) | Q(status__icontains = query) | Q(priority__icontains = query)).values()
     tickets = get_sorted_tickets(normalize_tickets(tickets))
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
+@login_required
 def filter_tickets(request):
     query = request.GET['filter_parm']
     if str(request.user) == 'Admin':
@@ -73,6 +75,7 @@ def filter_tickets(request):
     tickets = get_sorted_tickets(normalize_tickets(filtered_tickets), parm = 'priority')       
     return HttpResponse(content = json.dumps(tickets), content_type = "application/json; charset=UTF-8")
 
+@login_required
 def ticket_action(request):
     data = json.loads(request.body)
     action, _id, ticket = data['action'], data.get('id', ''), data.get('ticket', {})
@@ -117,6 +120,7 @@ def add_developer(request):
         response = 'Developer Already Exists'    
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
+@login_required
 def avg_closed_tickets(request):
     data = request.GET
     month, year, username = data.get('month', ''), int(data['year']), data['username']
@@ -137,6 +141,7 @@ def avg_closed_tickets(request):
     response = {'available_tickets': len_available_tickets, 'closed_tickets': len_closed_tickets, 'avg_closed': avg_closed}
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
+@login_required
 def avg_response_tickets(request):
     data = request.GET
     month, year, username = data.get('month', ''), int(data['year']), data['username']
@@ -161,6 +166,7 @@ def avg_response_tickets(request):
     response = {'without_response': without_response, 'with_response': with_response, 'avg_response': avg_response}
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
+@login_required
 def fetch_developers(request):
     developers = [i.username for i in User.objects.filter(~Q(username = 'Admin'))]
     return HttpResponse(content=json.dumps(developers), content_type='application/json')    
