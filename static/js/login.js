@@ -56,7 +56,28 @@ app.controller('loginController',function ($scope,$http,$cookies) {
                         $scope.list_details = data;
                     });
     }
-
+    $scope.save_details=function(subject,submitted_date,modified_date,first_response,contact,description,status,assigned_to,priority){
+        var data = {}
+        data['action']='new';
+        data['ticket'] = {
+            subject:subject,
+            submitted_date:submitted_date,
+            modified_date:modified_date,
+            first_response:first_response,
+            contact:contact,
+            description:description,
+            status:status,
+            assigned_to:assigned_to,
+            priority:priority
+        }
+             $http({ 
+    method: 'POST', 
+    url: '/ticket_action/', 
+    data: data
+    }).success(function (data,status) {
+        window.location='/dashboard/'
+    });
+    }
     // $scope.list_head = ['lsd','sdfsd','wefwe','sdfds']
     $scope.fields = ['subject','submitted_date','modified_date','first_response','contact','assigned_to','description','status','priority']
     $scope.filters = ['Open', 'Working', 'Closed','Now', 'Soon', 'Someday']

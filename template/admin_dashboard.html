@@ -1,0 +1,124 @@
+<html ng-app="loginapp">
+    <head>
+        <title> Ticketing System </title>
+    </head>
+    <link rel="stylesheet" href="{{STATIC_URL}}css/login.css">
+    <script src="{{STATIC_URL}}js/jquery-1.9.1.min.js">
+      </script>
+       <script src="{{STATIC_URL}}js/angular.js"></script>
+       <script src="{{STATIC_URL}}js/angular_resource.js"></script>
+        <script src="{{STATIC_URL}}js/cookies.js"></script>
+    <body >
+      {%verbatim%}
+        <div  class="maindiv" ng-controller="loginController">
+            <div class="heading">Ticketing System
+              {%endverbatim%}
+              
+              <div style="color: white;float: right;
+font-size: 25px;display: inline-block;">{{username}}</div>
+              {%verbatim%}
+            </div>
+            <div class="tabs_div" ng-init="tab='ticket'">
+              <div class="indi_tab" ng-click="tab='ticket'">Tickets</div>
+              <div class="indi_tab" ng-click="tab='perfomance'">Perfomance</div>
+            </div>
+            <div class="inside_box" ng-show="tab=='ticket'">
+              
+              <div class="inside_search_tab">
+                <div class="right_box"><input type="text" placeholder="search"></input></div>
+                
+                <div class="right_box"><select ng-change="fetch_sorted(myField)" ng-model="myField" ng-options="field for field in fields">
+                  <option value="">-- sort --</option>
+                </select></div>
+                <div class="right_box"><select ng-change="fetch_filtered(myFilter)" ng-model="myFilter" ng-options="filter for filter in filters">
+                  <option value="">-- filter by priority and status --</option>
+                </select></div>
+
+                <div class="right_box" style="position: relative;
+left: 320px;
+width: 61px;
+height: 20px;
+background-color: green;
+border-radius: 4px;
+text-align: center;
+color: white;
+top: 15px;cursor:pointer;" ng-click="show_addnew=true;" ng-show="!show_addnew">add new</div>
+ <div class="right_box" style="position: relative;
+left: 320px;
+width: 61px;
+height: 20px;
+background-color: green;
+border-radius: 4px;
+text-align: center;
+color: white;
+top: 15px;cursor:pointer;" ng-click="show_addnew=false;" ng-show="show_addnew">cancel</div>
+              </div>
+              <div>
+                <table ng-show="!show_addnew">
+                                     <tr>
+                                         <th class="common_style" ng-show="key_head!='id'" ng-repeat="(key_head,val) in list_details[0]">
+                                          <span style="width: 100px;display: block;text-align: center;">{{key_head}}</span>
+                                        </th>
+                                         
+                                      
+                                     </tr>
+                                     <tr ng-repeat="(item1,key) in list_details">
+                                        <td class="common_style" ng-show="key!='id'" ng-repeat="(key,val) in list_details[item1]">{{val}}</td>
+                                         
+                                       
+
+                                      </tr>
+                             </table>
+                  <div ng-show="show_addnew" style="width:600px;margin:0 auto;position: relative;top: 53px;">
+                    <table style="width: 650px;">
+                      <tr>
+                        <td>subject</td>
+                        <td><input style="float:right;" type="text" ng-model="subject"></input></td>
+                      </tr>
+                      <tr>
+                        <td>submitted_date</td>
+                        <td><input style="float:right;" type="text" ng-model="submitted_date"></input></td>
+                      </tr>
+                      <tr>
+                        <td>modified_date</td>
+                        <td><input style="float:right;" type="text" ng-model="modified_date"></input></td>
+                      </tr>
+                      <tr>
+                        <td>first_response</td>
+                        <td><input style="float:right;" type="text" ng-model="first_response"></input></td>
+                      </tr>
+                      <tr>
+                        <td>contact</td>
+                        <td><input style="float:right;" type="text" ng-model="contact"></input></td>
+                      </tr>
+                      <tr>
+                        <td>description</td>
+                        <td><input style="float:right;" type="text" ng-model="description"></input></td>
+                      </tr>
+                      <tr>
+                        <td>status</td>
+                        <td><input style="float:right;" type="text" ng-model="status"></input></td>
+                      </tr>
+                      <tr>
+                        <td>assigned_to</td>
+                        <td><input style="float:right;" type="text" ng-model="assigned_to"></input></td>
+                      </tr>
+                      <tr>
+                        <td>priority</td>
+                        <td><input style="float:right;" type="text" ng-model="priority"></input></td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td><input style="float:right;" type="button" value="save" ng-click="save_details(subject,submitted_date,modified_date,first_response,contact,description,status,assigned_to,priority)"></input></td>
+                      </tr>
+                      
+                    </table>
+                   
+                  </div>
+              </div>
+            </div>
+        </div>
+        {%endverbatim%}
+    </body>
+ <script src="{{STATIC_URL}}js/login.js"></script>
+</html>

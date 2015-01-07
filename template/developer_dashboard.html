@@ -11,12 +11,18 @@
     <body >
       {%verbatim%}
         <div  class="maindiv" ng-controller="loginController">
-            <div class="heading">Ticketing System</div>
-            <div class="tabs_div">
+            <div class="heading">Ticketing System
+              {%endverbatim%}
+              
+              <div style="color: white;float: right;
+font-size: 25px;display: inline-block;">{{username}}</div>
+              {%verbatim%}
+            </div>
+            <div class="tabs_div" ng-init="tab='ticket'">
               <div class="indi_tab" ng-click="tab='ticket'">Tickets</div>
               <div class="indi_tab" ng-click="tab='perfomance'">Perfomance</div>
             </div>
-            <div class="inside_box">
+            <div class="inside_box" ng-show="tab=='ticket'">
               
               <div class="inside_search_tab">
                 <div class="right_box"><input type="text" placeholder="search"></input></div>
@@ -28,27 +34,11 @@
                   <option value="">-- filter by priority and status --</option>
                 </select></div>
 
-                <div class="right_box">add new</div>
-              </div>
-              <div>
-                <table>
-                                     <tr>
-                                         <th class="common_style" ng-show="key_head!='id'" ng-repeat="(key_head,val) in list_details[0]">
-                                          <span style="width: 100px;display: block;text-align: center;">{{key_head}}</span>
-                                        </th>
-                                         
-                                      
-                                     </tr>
-                                     <tr ng-repeat="(item1,key) in list_details">
-                                        <td class="common_style" ng-show="key!='id'" ng-repeat="(key,val) in list_details[item1]">{{val}}</td>
-                                         
-                                       
-
-                                      </tr>
-                             </table>
+               
+                  </div>
               </div>
             </div>
-        </div>
+
         {%endverbatim%}
     </body>
  <script src="{{STATIC_URL}}js/login.js"></script>
