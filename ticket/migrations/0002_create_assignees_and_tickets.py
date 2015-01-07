@@ -46,7 +46,7 @@ class Migration(DataMigration):
         users = User.objects.filter(~Q(username = 'Admin'))
         STATUS, PRIORITY = ['Open', 'Working', 'Closed'], ['Now', 'Soon', 'Someday']
         
-        for i in range(5000):
+        for i in range(1000):
             subject = 'issue00%s' % i
             submitted_date = self.random_date(_from, _to)
             first_response = self.random_date(submitted_date, submitted_date + timedelta(15)) 
