@@ -20,9 +20,9 @@ class Migration(SchemaMigration):
         # Adding model 'Ticket'
         db.create_table(u'ticket_ticket', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('subject', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('submitted_date', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('modified_date', self.gf('django.db.models.fields.DateField')(auto_now=True, blank=True)),
+            ('subject', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
+            ('submitted_date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now)),
+            ('modified_date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now)),
             ('first_response', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('contact', self.gf('django.db.models.fields.related.ForeignKey')(related_name='who raised', to=orm['auth.User'])),
             ('assigned_to', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
@@ -92,11 +92,11 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'first_response': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified_date': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'modified_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'}),
             'priority': ('django.db.models.fields.CharField', [], {'default': "'Now'", 'max_length': '10'}),
             'status': ('django.db.models.fields.CharField', [], {'default': "'Open'", 'max_length': '10'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'submitted_date': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'})
+            'subject': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'submitted_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'})
         }
     }
 

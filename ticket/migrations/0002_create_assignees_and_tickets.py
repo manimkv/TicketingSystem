@@ -49,8 +49,8 @@ class Migration(DataMigration):
         for i in range(5000):
             subject = 'issue00%s' % i
             submitted_date = self.random_date(_from, _to)
-            first_response = self.random_date(submitted_date, _to) 
-            modified_date = self.random_date(first_response, _to)
+            first_response = self.random_date(submitted_date, submitted_date + timedelta(15)) 
+            modified_date = self.random_date(first_response,  first_response + timedelta(15))
             contact = users[randrange(len(users))]
             rest = [u for u in users if u != contact]
             assigned_to = rest[randrange(len(rest))]
@@ -67,7 +67,6 @@ class Migration(DataMigration):
                                   description = description,
                                   status = status,
                                   priority = priority)
-
     def backwards(self, orm):
         "Write your backwards methods here."
 
@@ -122,11 +121,11 @@ class Migration(DataMigration):
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'first_response': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified_date': ('django.db.models.fields.DateField', [], {'auto_now': 'True', 'blank': 'True'}),
+            'modified_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'}),
             'priority': ('django.db.models.fields.CharField', [], {'default': "'Now'", 'max_length': '10'}),
             'status': ('django.db.models.fields.CharField', [], {'default': "'Open'", 'max_length': '10'}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'submitted_date': ('django.db.models.fields.DateField', [], {'auto_now_add': 'True', 'blank': 'True'})
+            'subject': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'submitted_date': ('django.db.models.fields.DateField', [], {'default': 'datetime.datetime.now'})
         }
     }
 
