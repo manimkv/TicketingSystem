@@ -17,4 +17,6 @@ urlpatterns = patterns('',
     url(r'^add_developer/$', 'ticket.views.add_developer'), 
     url(r'^avg_closed_tickets/$', 'ticket.views.avg_closed_tickets'), 
     url(r'^avg_response_tickets/$', 'ticket.views.avg_response_tickets'), 
+    url(r'^fetch_developers/$', 'ticket.views.fetch_developers'), 
+    
 )

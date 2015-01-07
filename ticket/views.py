@@ -118,13 +118,13 @@ def add_developer(request):
 
 def avg_closed_tickets(request):
     data = json.loads(request.body)
-    month, year, for_all = data.get('month', ''), data['year'], data['for_all']
+    month, year, username = data.get('month', ''), data['year'], data['username']
     start_date, end_date = get_relative_dates(month, year)
-    if for_all:
+    if username == 'all':
         available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
         closed_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date), status = 'Closed')
     else:
-        user = User.objects.get(username = data['username'])
+        user = User.objects.get(username = username)
         available_tickets = Ticket.objects.filter(assigned_to = user, submitted_date__range = (start_date, end_date))
         closed_tickets = Ticket.objects.filter(assigned_to = user, submitted_date__range = (start_date, end_date), status = 'Closed')        
     try:
@@ -137,12 +137,12 @@ def avg_closed_tickets(request):
 
 def avg_response_tickets(request):
     data = json.loads(request.body)
-    month, year, for_all = data.get('month', ''), data['year'], data['for_all']
+    month, year, username = data.get('month', ''), data['year'], data['username']
     start_date, end_date = get_relative_dates(month, year)
-    if for_all:
+    if username == 'all':
         available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
     else:
-        user = User.objects.get(username = data['username'])
+        user = User.objects.get(username = username)
         available_tickets = Ticket.objects.filter(assigned_to = user, submitted_date__range = (start_date, end_date))
     without_response = with_response = sum_dif = 0 
     for t in available_tickets:
@@ -158,3 +158,6 @@ def avg_response_tickets(request):
     response = {'without_response': without_response, 'with_response': with_response, 'avg_response': avg_response}
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
+def fetch_developers(request):
+    developers = [i.username for i in User.objects.filter(~Q(username = 'Admin'))]
+    return HttpResponse(content=json.dumps(developers), content_type='application/json')    
