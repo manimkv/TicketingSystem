@@ -75,8 +75,7 @@ app.controller('loginController',function ($scope,$http,$cookies) {
     $http.get("/fetch_developers/", {})
                     .success(function(data) {
                         $scope.list_developers = data;
-                        $scope.all_developers = $scope.list_developers;
-                        $scope.all_developers.push('all')
+                        $scope.all_developers = data.concat(['all'])
                     });
 
 
@@ -121,7 +120,7 @@ app.controller('loginController',function ($scope,$http,$cookies) {
             url: '/ticket_action/', 
             data: data
             }).success(function (data,status) {
-                alert(val['subject']+" status updated");
+                alert("status of "+val['subject']+" is updated");
                 // window.location='/dashboard/'
             });
     }

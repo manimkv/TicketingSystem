@@ -139,7 +139,7 @@ def avg_closed_tickets(request):
         avg_closed = (float(len_closed_tickets) / float(len_available_tickets)) * 100
     except ZeroDivisionError:
         avg_closed = 0.0
-    response = {'available_tickets': len_available_tickets, 'closed_tickets': len_closed_tickets, 'avg_closed': avg_closed}
+    response = {'available_tickets': len_available_tickets, 'closed_tickets': len_closed_tickets, 'avg_closed': round(avg_closed)}
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
 @login_required
@@ -161,7 +161,8 @@ def avg_response_tickets(request):
         else:
             without_response += 1
     try:
-        avg_response = float(sum_dif) / float(with_response) * 3600.0
+        avg_response = float(sum_dif) / (float(with_response) * 3600.0)
+        avg_response = '%s hrs  (%s days)' % (round(avg_response), round(avg_response/24))
     except ZeroDivisionError:
         avg_response = 0
     response = {'without_response': without_response, 'with_response': with_response, 'avg_response': avg_response}

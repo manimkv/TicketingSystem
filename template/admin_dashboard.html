@@ -20,8 +20,8 @@ font-size: 25px;display: inline-block;">{{username}}</div>
               
             </div>
             <div class="tabs_div" ng-init="tab='ticket'">
-              <div class="indi_tab" ng-click="tab='ticket'">Tickets</div>
-              <div class="indi_tab" ng-click="tab='perfomance';load_avg_res('all','');" >Perfomance</div>
+              <div class="indi_tab" ng-click="tab='ticket'" ng-class="{thisisselected:tab=='ticket'}">Tickets</div>
+              <div class="indi_tab" ng-click="tab='perfomance';load_avg_res('all','');" ng-class="{thisisselected:tab=='perfomance'}">Perfomance</div>
             </div>
             <div class="inside_box" ng-show="tab=='ticket'">
               
@@ -66,7 +66,7 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                       <tr>
                         <td>contact</td>
                         <td><select ng-model="contact" style="float:right;" ng-options="filter for filter in list_developers">
-                  <option value="">priority</option>
+                  <option value="">contact</option>
                 </select></td>
                       </tr>
                       <tr>
@@ -82,7 +82,7 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                       <tr>
                         <td>assigned_to</td>
                         <td><select ng-model="assigned_to" style="float:right;" ng-options="filter for filter in list_developers">
-                  <option value="">priority</option>
+                  <option value="">assigned_to</option>
                 </select></td>
                       </tr>
                       <tr>
@@ -99,9 +99,6 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                     </table>
                    
                   </div>
-
-
-              
               
               </div>
 
@@ -111,45 +108,45 @@ font-size: 25px;display: inline-block;">{{username}}</div>
               <div class="inside_search_tab">
                 <!-- <div class="right_box"><input type="text" placeholder="search"></input></div> -->
                 
-                <div class="right_box" ng-init = 'developer="all"'><select ng-change="load_avg_res_close(developer,month1);load_avg_res(developer,month);" ng-model="developer" ng-options="field for field in all_developers">
+                <div class="right_box" ng-init = 'developer="all"'><select ng-change="load_avg_res(developer,month);load_avg_res(developer,'');load_avg_res_close(developer,'');load_avg_res_close(developer,month1)" ng-model="developer" ng-options="field for field in all_developers">
                   <option value="">-- select --</option>
                 </select></div>
                 <div>
-                  <span class="indi_tab" ng-click="inside_res='first_response'">First Response</span>
-                  <span class="indi_tab" ng-click="inside_res='closed_response';load_avg_res_close(developer,'');" >Closed tickets</span>
+                  <span class="indi_tab" ng-click="inside_res='first_response'" ng-class="{thisisselected:inside_res=='first_response'}">First Response</span>
+                  <span class="indi_tab" ng-click="inside_res='closed_response';load_avg_res_close(developer,'');load_avg_res_close(developer,month1);" ng-class="{thisisselected:inside_res=='closed_response'}">Closed tickets</span>
                 </div>
                 <div style="width: 50%;margin: 0 auto;height: 300px;background-color: rgb(240, 240, 240);" ng-show="inside_res=='first_response'">
                   
-                  <div ><span><b>per year</b></span><div>Average Response:{{avg_details['avg_response']}}</div>
-                  <div>Ticket with Response:{{avg_details['with_response']}}</div>
-                  <div>Ticket without Response:{{avg_details['without_response']}}</div>
+                  <div ><span><b>per year</b></span><div>Average Response: {{avg_details['avg_response']}}</div>
+                  <div>Ticket with Response: {{avg_details['with_response']}}</div>
+                  <div>Ticket without Response: {{avg_details['without_response']}}</div>
                   </div>
                    <div>
                   <div ng-init="month='Jan';load_avg_res(developer,month);">
-                    for a particular month :<select ng-change="load_avg_res(developer,month);" ng-model="month" ng-options="field for field in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']">
+                    <span style="color: blue">for a particular month</span> :<select ng-change="load_avg_res(developer,month);" ng-model="month" ng-options="field for field in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']">
                   <option value="">-- select --</option>
 
                 </select>
-                <div ><span><b>per month</b></span><div>Average Response:{{avg_month['avg_response']}}</div>
-                  <div>Ticket with Response:{{avg_month['with_response']}}</div>
-                  <div>Ticket without Response:{{avg_month['without_response']}}</div></div>
+                <div ><span><b>per month</b></span><div>Average Response: {{avg_month['avg_response']}}</div>
+                  <div>Ticket with Response: {{avg_month['with_response']}}</div>
+                  <div>Ticket without Response: {{avg_month['without_response']}}</div></div>
                   </div>
                 </div>
                 </div>
                 <div style="width: 50%;margin: 0 auto;height: 300px;background-color: rgb(240, 240, 240);" ng-show="inside_res=='closed_response'">
                   
-                  <div><span><b>per year</b></span><div>Average Response:{{avg_details_close['available_tickets']}}</div>
-                  <div>Ticket with Response:{{avg_details_close['closed_tickets']}}</div>
-                  <div>Ticket without Response:{{avg_details_close['avg_closed']}}</div></div>
+                  <div><span><b>per year</b></span><div>Available Tickets: {{avg_details_close['available_tickets']}}</div>
+                  <div>Closed Tickets: {{avg_details_close['closed_tickets']}}</div>
+                  <div>Average Closed: {{avg_details_close['avg_closed']}}</div></div>
                    <div>
                   <div ng-init="month1='Jan';load_avg_res_close(developer,month1);">
-                    for a particular month :<select ng-change="load_avg_res_close(developer,month1);"ng-model="month1" ng-options="field for field in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']">
+                    <span style="color: blue">for a particular month</span> :<select ng-change="load_avg_res_close(developer,month1);"ng-model="month1" ng-options="field for field in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']">
                   <option value="">-- select --</option>
 
                 </select>
-                <div ><span><b>per month</b></span><div>Average Response:{{avg_details_close_month['available_tickets']}}</div>
-                  <div>Ticket with Response:{{avg_details_close_month['closed_tickets']}}</div>
-                  <div>Ticket without Response:{{avg_details_close_month['avg_closed']}}</div></div>
+                <div ><span><b>per month</b></span><div>Available Tickets: {{avg_details_close_month['available_tickets']}}</div>
+                  <div>Closed Tickets: {{avg_details_close_month['closed_tickets']}}</div>
+                  <div>Average Closed: {{avg_details_close_month['avg_closed']}}</div></div>
                   </div>
                 </div>
                 </div>
