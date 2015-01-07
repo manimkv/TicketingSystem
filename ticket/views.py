@@ -41,7 +41,7 @@ def logout_view(request):
 @login_required
 def dashboard(request):
     logged_user = str(request.user)
-    if logged_user == 'admin':
+    if logged_user == 'Admin':
     	response = 'admin_dashboard.html'
     else:
     	response = 'developer_dashboard.html'
@@ -152,7 +152,7 @@ def avg_response_tickets(request):
         else:
             without_response += 1
     try:
-        avg_response = float(sum_dif) / float(with_response) * 60.0
+        avg_response = float(sum_dif) / float(with_response) * 3600.0
     except ZeroDivisionError:
         avg_response = 0
     response = {'without_response': without_response, 'with_response': with_response, 'avg_response': avg_response}

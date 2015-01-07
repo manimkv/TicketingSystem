@@ -39,7 +39,7 @@ app.controller('loginController',function ($scope,$http,$cookies) {
     	window.location='/dashboard/'
     });
 	}
-    $http.get("/fetch_tickets/?fetch_for=all&&sort_parm=status", {})
+    $http.get("/fetch_tickets/?sort_parm=status", {})
                     .success(function(data) {
                         $scope.list_details = data;
                     });

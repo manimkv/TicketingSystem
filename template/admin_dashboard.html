@@ -31,29 +31,15 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                   <option value="">-- sort --</option>
                 </select></div>
                 <div class="right_box"><select ng-change="fetch_filtered(myFilter)" ng-model="myFilter" ng-options="filter for filter in filters">
-                  <option value="">-- filter by priority and status --</option>
+                  <option value="">-- filter by priority or status --</option>
                 </select></div>
 
-                <div class="right_box" style="position: relative;
-left: 320px;
-width: 61px;
-height: 20px;
-background-color: green;
-border-radius: 4px;
-text-align: center;
-color: white;
-top: 15px;cursor:pointer;" ng-click="show_addnew=true;" ng-show="!show_addnew">add new</div>
- <div class="right_box" style="position: relative;
-left: 320px;
-width: 61px;
-height: 20px;
-background-color: green;
-border-radius: 4px;
-text-align: center;
-color: white;
-top: 15px;cursor:pointer;" ng-click="show_addnew=false;" ng-show="show_addnew">cancel</div>
+                <div class="right_box" style="position: relative;left: 320px;width: 61px;height: 20px;background-color: green;border-radius: 4px;text-align: center;color: white; top: 15px;cursor:pointer;" ng-click="show_addnew=true;"ng-show="!show_addnew">add new</div>
+ 
+ <div class="right_box" style="position: relative;left: 320px;width: 61px;height: 20px;background-color: green;border-radius: 4px;text-align: center;color: white;top: 15px;cursor:pointer;" ng-click="show_addnew=false;" ng-show="show_addnew">cancel</div>
               </div>
               <div>
+
                 <table ng-show="!show_addnew">
                                      <tr>
                                          <th class="common_style" ng-show="key_head!='id'" ng-repeat="(key_head,val) in list_details[0]">
@@ -115,6 +101,8 @@ top: 15px;cursor:pointer;" ng-click="show_addnew=false;" ng-show="show_addnew">c
                     </table>
                    
                   </div>
+              
+              
               </div>
             </div>
         </div>
