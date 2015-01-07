@@ -124,8 +124,9 @@ def avg_closed_tickets(request):
         available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
         closed_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date), status = 'Closed')
     else:
-        available_tickets = Ticket.objects.filter(assigned_to = request.user, submitted_date__range = (start_date, end_date))
-        closed_tickets = Ticket.objects.filter(assigned_to = request.user, submitted_date__range = (start_date, end_date), status = 'Closed')        
+        user = User.objects.get(username = data['username'])
+        available_tickets = Ticket.objects.filter(assigned_to = user, submitted_date__range = (start_date, end_date))
+        closed_tickets = Ticket.objects.filter(assigned_to = user, submitted_date__range = (start_date, end_date), status = 'Closed')        
     try:
         len_closed_tickets, len_available_tickets = len(closed_tickets), len(available_tickets)
         avg_closed = (float(len_closed_tickets) / float(len_available_tickets)) * 100
@@ -141,11 +142,12 @@ def avg_response_tickets(request):
     if for_all:
         available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
     else:
-        available_tickets = Ticket.objects.filter(assigned_to = request.user, submitted_date__range = (start_date, end_date))
+        user = User.objects.get(username = data['username'])
+        available_tickets = Ticket.objects.filter(assigned_to = user, submitted_date__range = (start_date, end_date))
     without_response = with_response = sum_dif = 0 
     for t in available_tickets:
         if t.first_response:
-            sum_dif += relativedelta(t.first_response, t.submitted_date).seconds
+            sum_dif += (t.first_response - t.submitted_date).total_seconds()
             with_response += 1
         else:
             without_response += 1
