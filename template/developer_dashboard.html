@@ -13,11 +13,12 @@
         <div  class="maindiv" ng-controller="loginController">
             <div class="heading">Ticketing System
               {%endverbatim%}
-              
+                            <a href="/logout/" style="float: right;position: relative;margin-left:10px;"><button >logout</button></a>
+
               <div style="color: white;float: right;
 font-size: 25px;display: inline-block;">{{username}}</div>
               {%verbatim%}
-              <a href="/logout/" style="float: right;position: relative;top: 26px;left: 60px;"><button >logout</button></a>
+              
             </div>
             <div class="tabs_div" ng-init="tab='ticket'">
               <div class="indi_tab" ng-click="tab='ticket'">Tickets</div>
@@ -26,7 +27,7 @@ font-size: 25px;display: inline-block;">{{username}}</div>
             <div class="inside_box" ng-show="tab=='ticket'">
               
               <div class="inside_search_tab">
-                <div class="right_box"><input type="text" placeholder="search"></input></div>
+                <!-- <div class="right_box"><input type="text" placeholder="search"></input></div> -->
                 
                 <div class="right_box"><select ng-change="fetch_sorted(myField)" ng-model="myField" ng-options="field for field in fields">
                   <option value="">-- sort --</option>

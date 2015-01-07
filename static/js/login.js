@@ -29,7 +29,6 @@ app.directive('ngEnter', function() {
 app.controller('loginController',function ($scope,$http,$cookies) {
 	$scope.continue_login = function(username,password){
         $http.defaults.headers.post['csrf_tocken'] = $cookies.csrftoken;
-		console.log(username,password)
 		var data = {email:username,password:password}
 		 $http({ 
     method: 'POST', 
@@ -39,10 +38,48 @@ app.controller('loginController',function ($scope,$http,$cookies) {
     	window.location='/dashboard/'
     });
 	}
+    $scope.load_avg_res=function(who,month){
+        $http.get("/avg_response_tickets/?username="+who+"&&year=2015&&month="+month, {})
+                    .success(function(data) {
+                        if(month==''){
+                        $scope.avg_details = data;
+                        }
+                        else{
+                            $scope.avg_month = data;
+                        }
+                    });
+    }
+    $scope.load_avg_res_close=function(who,month){
+        $http.get("/avg_closed_tickets/?username="+who+"&&year=2015&&month="+month, {})
+                    .success(function(data) {
+                        if(month==''){
+                        $scope.avg_details_close = data;
+                        }
+                        else{
+                            $scope.avg_details_close_month = data;
+                        }
+                    });
+    }
+
+    $scope.search_tickets=function(query){
+        $http.get("/search_tickets/?query="+query, {})
+                    .success(function(data) {
+                        $scope.list_details = data;
+                    });
+    }
+
     $http.get("/fetch_tickets/?sort_parm=status", {})
                     .success(function(data) {
                         $scope.list_details = data;
                     });
+    $http.get("/fetch_developers/", {})
+                    .success(function(data) {
+                        $scope.list_developers = data;
+                        $scope.all_developers = $scope.list_developers;
+                        $scope.all_developers.push('all')
+                    });
+
+
     $scope.fetch_sorted = function(sort_parm){
         $http.get("/fetch_tickets/?sort_parm="+sort_parm, {})
                     .success(function(data) {
@@ -56,14 +93,11 @@ app.controller('loginController',function ($scope,$http,$cookies) {
                         $scope.list_details = data;
                     });
     }
-    $scope.save_details=function(subject,submitted_date,modified_date,first_response,contact,description,status,assigned_to,priority){
+    $scope.save_details=function(subject,contact,description,status,assigned_to,priority){
         var data = {}
         data['action']='new';
         data['ticket'] = {
             subject:subject,
-            submitted_date:submitted_date,
-            modified_date:modified_date,
-            first_response:first_response,
             contact:contact,
             description:description,
             status:status,
@@ -78,15 +112,16 @@ app.controller('loginController',function ($scope,$http,$cookies) {
         window.location='/dashboard/'
     });
     }
+
     $scope.change_status=function(val){
-        var data = [].concat(val)
-        data['action'] ='update';
+        var data = {'status':val['status'],'id':val['id'],'action':'update'}
+        // data['action'] ='update';
           $http({ 
             method: 'POST', 
             url: '/ticket_action/', 
             data: data
             }).success(function (data,status) {
-                alert(data['subject']+"status updated");
+                alert(val['subject']+" status updated");
                 // window.location='/dashboard/'
             });
     }

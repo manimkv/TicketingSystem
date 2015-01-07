@@ -12,7 +12,8 @@ from lib.ticket_processing_helpers import *
 from lib.utils import *
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
+from calendar import month_abbr
+months = dict((v,k) for k,v in enumerate(month_abbr))
 
 def signin(request):
     return render(request, 'signin.html')
@@ -74,7 +75,7 @@ def filter_tickets(request):
 
 def ticket_action(request):
     data = json.loads(request.body)
-    action, _id, ticket = data['action'], data['id'], data.get('ticket', {})
+    action, _id, ticket = data['action'], data.get('id', ''), data.get('ticket', {})
     if action == 'new':
         response = 'Ticket Created Succesfully'
         try:
@@ -88,9 +89,9 @@ def ticket_action(request):
             response = e.__class__.__name__
     elif action == 'update':
         t = Ticket.objects.get(id = _id)
-        t.status = ticket['status']
-        if not tictket.first_response:
-            t.first_response = ticket['first_response']
+        t.status = data['status']
+        if not t.first_response:
+            t.first_response = datetime.now()
         t.save()
         response = 'Ticket Updated Succesfully'
     else:
@@ -117,8 +118,9 @@ def add_developer(request):
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
 def avg_closed_tickets(request):
-    data = json.loads(request.body)
-    month, year, username = data.get('month', ''), data['year'], data['username']
+    data = request.GET
+    month, year, username = data.get('month', ''), int(data['year']), data['username']
+    month = months[month]
     start_date, end_date = get_relative_dates(month, year)
     if username == 'all':
         available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))
@@ -136,8 +138,9 @@ def avg_closed_tickets(request):
     return HttpResponse(content=json.dumps(response), content_type='application/json')    
 
 def avg_response_tickets(request):
-    data = json.loads(request.body)
-    month, year, username = data.get('month', ''), data['year'], data['username']
+    data = request.GET
+    month, year, username = data.get('month', ''), int(data['year']), data['username']
+    month = months[month]
     start_date, end_date = get_relative_dates(month, year)
     if username == 'all':
         available_tickets = Ticket.objects.filter(submitted_date__range = (start_date, end_date))

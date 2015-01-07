@@ -13,20 +13,20 @@
         <div  class="maindiv" ng-controller="loginController">
             <div class="heading">Ticketing System
               {%endverbatim%}
-              
+              <a href="/logout/" style="float: right;position: relative;margin-left:10px;"><button >logout</button></a>
               <div style="color: white;float: right;
 font-size: 25px;display: inline-block;">{{username}}</div>
               {%verbatim%}
-              <a href="/logout/" style="float: right;position: relative;top: 26px;left: 60px;"><button >logout</button></a>
+              
             </div>
             <div class="tabs_div" ng-init="tab='ticket'">
               <div class="indi_tab" ng-click="tab='ticket'">Tickets</div>
-              <div class="indi_tab" ng-click="tab='perfomance'">Perfomance</div>
+              <div class="indi_tab" ng-click="tab='perfomance';load_avg_res('all','');" >Perfomance</div>
             </div>
             <div class="inside_box" ng-show="tab=='ticket'">
               
               <div class="inside_search_tab">
-                <div class="right_box"><input type="text" placeholder="search"></input></div>
+                <div class="right_box"><input ng-change="search_tickets(search)" ng-model="search" type="text" placeholder="search"></input></div>
                 
                 <div class="right_box"><select ng-change="fetch_sorted(myField)" ng-model="myField" ng-options="field for field in fields">
                   <option value="">-- sort --</option>
@@ -62,41 +62,38 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                         <td>subject</td>
                         <td><input style="float:right;" type="text" ng-model="subject"></input></td>
                       </tr>
-                      <tr>
-                        <td>submitted_date</td>
-                        <td><input style="float:right;" type="text" ng-model="submitted_date"></input></td>
-                      </tr>
-                      <tr>
-                        <td>modified_date</td>
-                        <td><input style="float:right;" type="text" ng-model="modified_date"></input></td>
-                      </tr>
-                      <tr>
-                        <td>first_response</td>
-                        <td><input style="float:right;" type="text" ng-model="first_response"></input></td>
-                      </tr>
+                      
                       <tr>
                         <td>contact</td>
-                        <td><input style="float:right;" type="text" ng-model="contact"></input></td>
+                        <td><select ng-model="contact" style="float:right;" ng-options="filter for filter in list_developers">
+                  <option value="">priority</option>
+                </select></td>
                       </tr>
                       <tr>
                         <td>description</td>
-                        <td><input style="float:right;" type="text" ng-model="description"></input></td>
+                        <td><input style="float:right; height: 70px;" type="text" ng-model="description"></input></td>
                       </tr>
                       <tr>
                         <td>status</td>
-                        <td><input style="float:right;" type="text" ng-model="status"></input></td>
+                        <td><select ng-model="status"  style="float:right;" ng-options="filter for filter in ['Open','Closed','Working']">
+                  <option value="">status</option>
+                </select></td>
                       </tr>
                       <tr>
                         <td>assigned_to</td>
-                        <td><input style="float:right;" type="text" ng-model="assigned_to"></input></td>
+                        <td><select ng-model="assigned_to" style="float:right;" ng-options="filter for filter in list_developers">
+                  <option value="">priority</option>
+                </select></td>
                       </tr>
                       <tr>
                         <td>priority</td>
-                        <td><input style="float:right;" type="text" ng-model="priority"></input></td>
+                        <td><select ng-model="priority" style="float:right;" ng-options="filter for filter in ['Now','Soon','Someday']">
+                  <option value="">priority</option>
+                </select></td>
                       </tr>
                       <tr>
                         <td></td>
-                        <td><input style="float:right;" type="button" value="save" ng-click="save_details(subject,submitted_date,modified_date,first_response,contact,description,status,assigned_to,priority)"></input></td>
+                        <td><input style="float:right;background-color: aqua;" type="button" value="save" ng-click="save_details(subject,contact,description,status,assigned_to,priority)"></input></td>
                       </tr>
                       
                     </table>
@@ -110,40 +107,49 @@ font-size: 25px;display: inline-block;">{{username}}</div>
 
             </div>
                 <div class="inside_box" ng-show="tab=='perfomance'">
-              <div ng-init="inside_res='first_response'">Perfomace</div>
+              <div ng-init="inside_res='first_response'" >Perfomace</div>
               <div class="inside_search_tab">
                 <!-- <div class="right_box"><input type="text" placeholder="search"></input></div> -->
                 
-                <div class="right_box"><select ng-change="fetch_indi_data(indi)" ng-model="indi" ng-options="field for field in ['dev1','dev2','dev3','all']">
+                <div class="right_box" ng-init = 'developer="all"'><select ng-change="load_avg_res_close(developer,month1);load_avg_res(developer,month);" ng-model="developer" ng-options="field for field in all_developers">
                   <option value="">-- select --</option>
                 </select></div>
                 <div>
                   <span class="indi_tab" ng-click="inside_res='first_response'">First Response</span>
-                  <span class="indi_tab" ng-click="inside_res='closed_response'">Closed tickets</span>
+                  <span class="indi_tab" ng-click="inside_res='closed_response';load_avg_res_close(developer,'');" >Closed tickets</span>
                 </div>
                 <div style="width: 50%;margin: 0 auto;height: 300px;background-color: rgb(240, 240, 240);" ng-show="inside_res=='first_response'">
                   
-                  <div ><span>per year</span><span>24 hr(1days)</span></div>
+                  <div ><span><b>per year</b></span><div>Average Response:{{avg_details['avg_response']}}</div>
+                  <div>Ticket with Response:{{avg_details['with_response']}}</div>
+                  <div>Ticket without Response:{{avg_details['without_response']}}</div>
+                  </div>
                    <div>
-                  <div>
-                    for a particular month :<select ng-change="fetch_permonth(month)" ng-model="month" ng-options="field for field in ['jan','feb','march','apr','may','jun','july','aug','sep','nov','oct','dec']">
+                  <div ng-init="month='Jan';load_avg_res(developer,month);">
+                    for a particular month :<select ng-change="load_avg_res(developer,month);" ng-model="month" ng-options="field for field in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']">
                   <option value="">-- select --</option>
 
                 </select>
-                <div ><span>per month</span><span>48 hr(2days)</span></div>
+                <div ><span><b>per month</b></span><div>Average Response:{{avg_month['avg_response']}}</div>
+                  <div>Ticket with Response:{{avg_month['with_response']}}</div>
+                  <div>Ticket without Response:{{avg_month['without_response']}}</div></div>
                   </div>
                 </div>
                 </div>
                 <div style="width: 50%;margin: 0 auto;height: 300px;background-color: rgb(240, 240, 240);" ng-show="inside_res=='closed_response'">
                   
-                  <div ><span>per year</span><span>24 hr(1days)</span></div>
+                  <div><span><b>per year</b></span><div>Average Response:{{avg_details_close['available_tickets']}}</div>
+                  <div>Ticket with Response:{{avg_details_close['closed_tickets']}}</div>
+                  <div>Ticket without Response:{{avg_details_close['avg_closed']}}</div></div>
                    <div>
-                  <div>
-                    for a particular month :<select ng-change="fetch_permonth(month)" ng-model="month" ng-options="field for field in ['jan','feb','march','apr','may','jun','july','aug','sep','nov','oct','dec']">
+                  <div ng-init="month1='Jan';load_avg_res_close(developer,month1);">
+                    for a particular month :<select ng-change="load_avg_res_close(developer,month1);"ng-model="month1" ng-options="field for field in ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']">
                   <option value="">-- select --</option>
 
                 </select>
-                <div ><span>per month</span><span>48 hr(2days)</span></div>
+                <div ><span><b>per month</b></span><div>Average Response:{{avg_details_close_month['available_tickets']}}</div>
+                  <div>Ticket with Response:{{avg_details_close_month['closed_tickets']}}</div>
+                  <div>Ticket without Response:{{avg_details_close_month['avg_closed']}}</div></div>
                   </div>
                 </div>
                 </div>

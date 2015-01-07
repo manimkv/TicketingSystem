@@ -2,6 +2,9 @@
 
 
 }
+.selected{
+	color: white;
+}
 .heading{
 	height: 50px;
 	width: 100%;
