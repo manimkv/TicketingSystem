@@ -78,6 +78,18 @@ app.controller('loginController',function ($scope,$http,$cookies) {
         window.location='/dashboard/'
     });
     }
+    $scope.change_status=function(val){
+        var data = [].concat(val)
+        data['action'] ='update';
+          $http({ 
+            method: 'POST', 
+            url: '/ticket_action/', 
+            data: data
+            }).success(function (data,status) {
+                alert(data['subject']+"status updated");
+                // window.location='/dashboard/'
+            });
+    }
     // $scope.list_head = ['lsd','sdfsd','wefwe','sdfds']
     $scope.fields = ['subject','submitted_date','modified_date','first_response','contact','assigned_to','description','status','priority']
     $scope.filters = ['Open', 'Working', 'Closed','Now', 'Soon', 'Someday']
