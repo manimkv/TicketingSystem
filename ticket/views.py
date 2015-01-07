@@ -88,6 +88,7 @@ def ticket_action(request):
                                   description = ticket.get('description', ''),
                                   status = ticket.get('status', 'Open'),
                                   priority = ticket.get('priority', 'Now'))
+            """Django mailer alert can be used"""
         except (KeyError, IntegrityError) as e:
             response = e.__class__.__name__
     elif action == 'update':
