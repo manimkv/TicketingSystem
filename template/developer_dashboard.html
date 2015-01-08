@@ -21,8 +21,8 @@ font-size: 25px;display: inline-block;">{{username}}</div>
               
             </div>
             <div class="tabs_div" ng-init="tab='ticket'">
-              <div class="indi_tab" ng-click="tab='ticket'">Tickets</div>
-              <div class="indi_tab" ng-click="tab='perfomance'">Performance</div>
+              <div class="indi_tab" ng-click="tab='ticket'" ng-class="{thisisselected:tab=='ticket'}">Tickets</div>
+              <!-- <div class="indi_tab" ng-click="tab='perfomance'">Performance</div> -->
             </div>
             <div class="inside_box" ng-show="tab=='ticket'">
               
@@ -35,14 +35,13 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                 <div class="right_box"><select ng-change="fetch_filtered(myFilter)" ng-model="myFilter" ng-options="filter for filter in filters">
                   <option value="">-- filter by priority or status --</option>
                 </select></div>
-                  <table ng-show="!show_addnew">
+                            <table ng-show="!show_addnew">
                                      <tr>
                                          <th class="common_style" ng-show="key_head!='id'" ng-repeat="(key_head,val) in list_details[0]">
                                           <span style="width: 100px;display: block;text-align: center;">{{key_head}}</span>
                                         </th>
-                                         
-                                      
                                      </tr>
+                                     
                                      <tr ng-repeat="(item1,key) in list_details">
                                         <td class="common_style" ng-show="key!='id'" ng-repeat="(key,val) in list_details[item1]">
                                           <span ng-show="key!='status'">{{val}}</span>
@@ -52,65 +51,15 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                                             </select>
                                           </span>
                                         </td>
-
-                                         
-                                       
-
                                       </tr>
                              </table>
                
-                  </div>
               </div>
-              <div class="inside_box" ng-show="tab=='perfomance'">
-              <div ng-init="inside_res='first_response'">Perfomace</div>
-              <div class="inside_search_tab">
-                <!-- <div class="right_box"><input type="text" placeholder="search"></input></div> -->
-                
-                <div class="right_box"><select ng-change="fetch_indi_data(indi)" ng-model="indi" ng-options="field for field in ['dev1','dev2','dev3','all']">
-                  <option value="">-- select --</option>
-                </select></div>
-                <div>
-                  <span class="indi_tab" ng-click="inside_res='first_response'">First Response</span>
-                  <span class="indi_tab" ng-click="inside_res='closed_response'">Closed tickets</span>
-                </div>
-                <div style="width: 50%;margin: 0 auto;height: 300px;background-color: rgb(240, 240, 240);" ng-show="inside_res=='first_response'">
-                  
-                  <div ><span>per year</span><span>24 hr(1days)</span></div>
-                   <div>
-                  <div>
-                    for a particular month :<select ng-change="fetch_permonth(month)" ng-model="month" ng-options="field for field in ['jan','feb','march','apr','may','jun','july','aug','sep','nov','oct','dec']">
-                  <option value="">-- select --</option>
-
-                </select>
-                <div ><span>per month</span><span>48 hr(2days)</span></div>
-                  </div>
-                </div>
-                </div>
-                <div style="width: 50%;margin: 0 auto;height: 300px;background-color: rgb(240, 240, 240);" ng-show="inside_res=='closed_response'">
-                  
-                  <div ><span>per year</span><span>24 hr(1days)</span></div>
-                   <div>
-                  <div>
-                    for a particular month :<select ng-change="fetch_permonth(month)" ng-model="month" ng-options="field for field in ['jan','feb','march','apr','may','jun','july','aug','sep','nov','oct','dec']">
-                  <option value="">-- select --</option>
-
-                </select>
-                <div ><span>per month</span><span>48 hr(2days)</span></div>
-                  </div>
-                </div>
-                </div>
-               
-                <!-- <div class="right_box"><select ng-change="fetch_filtered(myFilter)" ng-model="myFilter" ng-options="filter for filter in filters">
-                  <option value="">-- filter by priority or status --</option>
-                </select></div> -->
-
-               
-                  </div>
               </div>
             </div>
 
-
         {%endverbatim%}
+    
     </body>
  <script src="{{STATIC_URL}}js/login.js"></script>
 </html>
