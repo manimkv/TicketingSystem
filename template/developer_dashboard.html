@@ -35,7 +35,7 @@ font-size: 25px;display: inline-block;">{{username}}</div>
                 <div class="right_box"><select ng-change="fetch_filtered(myFilter)" ng-model="myFilter" ng-options="filter for filter in filters">
                   <option value="">-- filter by priority or status --</option>
                 </select></div>
-                            <table ng-show="!show_addnew">
+                            <table ng-show="!show_addnew" style="position: relative;top: 30px;">
                                      <tr>
                                          <th class="common_style" ng-show="key_head!='id'" ng-repeat="(key_head,val) in list_details[0]">
                                           <span style="width: 100px;display: block;text-align: center;">{{key_head}}</span>
